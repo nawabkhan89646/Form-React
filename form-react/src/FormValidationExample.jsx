@@ -3,58 +3,71 @@ import './App.css'
 
 const FormValidationExample = () => {
 
+  // Initialize state for form data and validation errors
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
     confirmPassword: ''
-  })
+  });
 
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({});
 
+  // Handle changes to form fields and update state accordingly
   const handleChange = (e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     setFormData({
-        ...formData, [name] : value
-    })
-  }
+      ...formData, 
+      [name]: value  // Dynamically update the field in formData based on the name attribute
+    });
+  };
 
+  // Handle form submission and perform validation
   const handleSubmit = (e) => {
-    e.preventDefault()
-    const validationErrors = {}
-    if(!formData.username.trim()) {
-        validationErrors.username = "username is required"
+    e.preventDefault(); // Prevent default form submission behavior
+
+    const validationErrors = {};
+
+    // Validate username
+    if (!formData.username.trim()) {
+      validationErrors.username = "Username is required";
     }
 
-    if(!formData.email.trim()) {
-        validationErrors.email = "email is required"
-    } else if(!/\S+@\S+\.\S+/.test(formData.email)){
-        validationErrors.email = "email is not valid"
+    // Validate email
+    if (!formData.email.trim()) {
+      validationErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      validationErrors.email = "Email is not valid"; // Check if email is in correct format
     }
 
-    if(!formData.password.trim()) {
-        validationErrors.password = "password is required"
-    } else if(formData.password.length < 6){
-        validationErrors.password = "password should be at least 6 char"
+    // Validate password
+    if (!formData.password.trim()) {
+      validationErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      validationErrors.password = "Password should be at least 6 characters";
     }
 
-    if(formData.confirmPassword !== formData.password) {
-        validationErrors.confirmPassword = "password not matched"
+    // Validate confirm password (should match the password)
+    if (formData.confirmPassword !== formData.password) {
+      validationErrors.confirmPassword = "Password does not match";
     }
 
-    setErrors(validationErrors)
+    // Update the errors state with any validation errors
+    setErrors(validationErrors);
 
-    if(Object.keys(validationErrors).length === 0) {
-        alert("Form Submitted successfully")
-        setFormData({
-          username: '',
-          email: '',
-          password: '',
-          confirmPassword: ''
-        })
+    // If no errors, show a success message and reset the form
+    if (Object.keys(validationErrors).length === 0) {
+      alert("Form submitted successfully");
+      
+      // Reset form data
+      setFormData({
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      });
     }
-
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -64,46 +77,50 @@ const FormValidationExample = () => {
           type="text"
           name="username"
           value={formData.username}
-          placeholder='username'  
-          autoComplete='off'  
+          placeholder="Username"  
+          autoComplete="off"
           onChange={handleChange}   
         />
-          {errors.username && <span>{errors.username}</span>}  
+        {errors.username && <span>{errors.username}</span>}  {/* Display username validation error if exists */}
       </div>
+
       <div>
         <label>Email:</label>
         <input
           type="email"
           name="email"
           value={formData.email}
-          placeholder='example@gmail.com'
-          autoComplete='off'
+          placeholder="example@gmail.com"
+          autoComplete="off"
           onChange={handleChange} 
         />
-          {errors.email && <span>{errors.email}</span>}  
+        {errors.email && <span>{errors.email}</span>}  {/* Display email validation error if exists */}
       </div>
+
       <div>
         <label>Password:</label>
         <input
           type="password"
           name="password"
           value={formData.password}
-          placeholder='******'
+          placeholder="******"
           onChange={handleChange} 
         />
-          {errors.password && <span>{errors.password}</span>}  
+        {errors.password && <span>{errors.password}</span>}  {/* Display password validation error if exists */}
       </div>
+
       <div>
         <label>Confirm Password:</label>
         <input
           type="password"
           name="confirmPassword"
           value={formData.confirmPassword}
-          placeholder='******'
+          placeholder="******"
           onChange={handleChange} 
         />
-          {errors.confirmPassword && <span>{errors.confirmPassword}</span>}  
+        {errors.confirmPassword && <span>{errors.confirmPassword}</span>}  {/* Display confirm password validation error if exists */}
       </div>
+
       <button type="submit">Submit</button>
     </form>
   );
